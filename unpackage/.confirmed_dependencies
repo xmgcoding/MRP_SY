@@ -1,0 +1,121 @@
+{
+	"index.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"images/bg.png",
+			"images/login_logo.png",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"html/main.html"
+		]
+	},
+	"html/tab-webview-main.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"html/tab-webview-subpage-about.html",
+			"css/mui.min.css",
+			"js/common.js"
+		],
+		"refer": [
+			"html/tab-webview-subpage-setting.html",
+			"html/tab-webview-subpage-chat.html",
+			"html/tab-webview-subpage-contact.html",
+			"html/tab-webview-subpage-about.html"
+		]
+	},
+	"html/tab-webview-subpage-about.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/common.js"
+		],
+		"refer": [
+			"html/barcode_scan.html"
+		]
+	},
+	"html/barcode_scan.html": {
+		"resources": [
+			"js/common.js",
+			"css/mui.min.css",
+			"js/mui.min.js",
+			"html/1.html"
+		],
+		"refer": [
+			"html/1.html",
+			"html/in.html",
+			"html/outstock.html"
+		]
+	},
+	"html/main.html": {
+		"resources": [
+			"js/common.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"html/home.html"
+		],
+		"refer": [
+			"html/information.html",
+			"html/setting.html",
+			"html/home.html"
+		]
+	},
+	"html/home.html": {
+		"refer": [
+			"html/barcode_scan.html",
+			"html/instock.html",
+			"html/used.html",
+			"html/search.html",
+			"html/outstock.html"
+		]
+	},
+	"html/outstock.html": {
+		"resources": [
+			"fonts/mui.ttf",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"js/common.js"
+		],
+		"refer": [
+			"html/barcode_scan.html"
+		]
+	},
+	"html/used.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/common.js"
+		],
+		"refer": [
+			"html/barcode_scan.html"
+		]
+	},
+	"html/search.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/common.js"
+		],
+		"refer": [
+			"html/barcode_scan.html"
+		]
+	},
+	"html/instock.html": {
+		"resources": [
+			"js/common.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/immersed.js"
+		],
+		"refer": [
+			"html/barcode_scan.html"
+		]
+	}
+}

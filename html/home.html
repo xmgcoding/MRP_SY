@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+			.title {
+				margin: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--下边弹出actionsheet-->
+		<ul class="mui-table-view mui-grid-view mui-grid-9">
+			<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-3" id="instock.html" onclick="clicked(this.id);">
+				<a href="#">
+					<span class="mui-icon mui-icon-home"></span>
+					<div class="mui-media-body">物料入库</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-3" id="used.html" onclick="clicked(this.id);">
+				<a href="#">
+					<span class="mui-icon mui-icon-email"></span>
+					<div class="mui-media-body">物料领用</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-3" id="outstock.html" onclick="clicked(this.id);">
+				<a href="#">
+					<span class="mui-icon mui-icon-chatbubble"></span>
+					<div class="mui-media-body">物料车间出库</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-3" id="search.html" onclick="clicked(this.id);">
+				<a href="#">
+					<span class="mui-icon mui-icon-location"></span>
+					<div class="mui-media-body">物料追踪</div>
+				</a>
+			</li>
+		</ul>
+		</div>
+
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/common.js"></script>
+	<script>
+		mui.init({
+			swipeBack: true //启用右滑关闭功能
+		});
+		mui('body').on('shown', '.mui-popover', function(e) {
+			//console.log('shown', e.detail.id);//detail为当前popover元素
+		});
+		mui('body').on('hidden', '.mui-popover', function(e) {
+			//console.log('hidden', e.detail.id);//detail为当前popover元素
+		});
+//		document.getElementById("picture-btn").addEventListener('tap', function() {
+//			var btnArray = [{
+//				title: "扫描二维码"
+//			}, {
+//				title: "扫描FRID"
+//			}];
+//			plus.nativeUI.actionSheet({
+//				title: "选择扫描项",
+//				cancel: "取消",
+//				buttons: btnArray
+//			}, function(e) {
+//				var index = e.index;
+//				switch(index) {
+//					case 1:
+//						clicked('barcode_scan.html',true,true);
+//						break;
+//					case 2:
+//						
+//						break;
+//					case 0:
+//
+//						break;
+//				}
+//
+//			});
+//		});
+
+		//扫描二维码
+		
+	</script>
+
+</html>

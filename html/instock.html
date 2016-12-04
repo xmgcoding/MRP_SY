@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+		<title>物料入库</title>
+		<script src="../js/mui.min.js"></script>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<script src="../js/common.js"></script>
+		<style>
+			.mui-input-row .mui-btn-block {
+				width: 65%;
+				padding: 10px 0;
+				margin-top: 4px;
+			}
+			
+			.mui-btn .mui-btn-primar {}
+		</style>
+		<script>
+			var img = null;
+			var blist = [];
+
+			function scaned(r) {
+				
+				var li = null,
+					hl = document.getElementById("history");
+				if(blist.length > 0) {
+					li = document.createElement("li");
+					li.className = "ditem";
+					hl.insertBefore(li, hl.childNodes[0]);
+				} else {
+					li = document.getElementById("nohistory");
+				}
+				li.id = blist.length;
+				var html = '<div class="hdata">';
+				html += r;
+				html += '</div>';
+				li.innerHTML = html;
+				li.setAttribute("onclick", "selected(id);");
+				blist[blist.length] = {
+					//type: t,
+					result: r,
+					//file: f
+				};
+				//update(t, r, f);
+				//alert(r);
+				var borcode_id=document.getElementById('borcode_id');
+				//console.log(borcode_id);
+				borcode_id.value = r+'';
+				
+				
+			}
+
+			function selected(id) {
+				var h = blist[id];
+				update(h.type, h.result, h.file);
+				if(h.result.indexOf("http://") == 0 || h.result.indexOf("https://") == 0) {
+					plus.nativeUI.confirm(h.result, function(i) {
+						if(i.index == 0) {
+							plus.runtime.openURL(h.result);
+						}
+					}, "", ["打开", "取消"]);
+				} else {
+					plus.nativeUI.alert(h.result);
+				}
+			}
+
+			function update(t, r, f) {
+				outSet("扫描成功：");
+				outLine(t);
+				outLine(r);
+				outLine("\n图片地址：" + f);
+				if(!f || f == "null") {
+					img.src = "../img/barcode.png";
+				} else {
+					plus.io.resolveLocalFileSystemURL(f, function(entry) {
+						img.src = entry.toLocalURL();
+					});
+					//img.src = "http://localhost:13131/"+f;
+				}
+			}
+
+			function onempty() {
+				if(window.plus) {
+					plus.nativeUI.alert('无扫描记录');
+				} else {
+					alert('无扫描记录');
+				}
+			}
+
+			function cleanHistroy() {
+				if(blist.length > 0) {
+					var hl = document.getElementById("history");
+					hl.innerHTML = '<li id="nohistory" class="ditem" onclick="onempty();">无历史记录	</li>';
+				}
+				plus.io.resolveLocalFileSystemURL("_doc/barcode/", function(entry) {
+					entry.removeRecursively(function() {
+						// Success
+					}, function(e) {
+						//alert( "failed"+e.message );
+					});
+				});
+			}
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a href="" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">物料入库</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-card">
+				<button type="button" class="mui-btn mui-btn-primary" onclick="clicked('barcode_scan.html',true,true);">二维码扫描</button>
+				<button type="button" class="mui-btn mui-btn-primary">RFID扫描</button>
+			</div>
+			<div class="mui-card">
+				<ul id="history" class="dlist" style="text-align:left;">
+					<li id="nohistory" class="ditem" onclick="onempty();">无记录 </li>
+				</ul>
+				<br/>
+				<button type="button" class="mui-btn mui-btn-warning" onclick="cleanHistroy();">清空记录</div>
+			</div>
+			<div class="mui-card">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-divider">基本信息</li>
+					<li class="mui-table-view-cell">
+						<form action="" class="mui-input-group">
+							<div class="mui-input-row">
+								<label for="">段别：</label>
+								<select class="mui-btn mui-btn-block">
+									<option value="item-1">请选择段别</option>
+									<option value="item-2">沈阳铁路局2</option>
+									<option value="item-3">沈阳铁路局3</option>
+									<option value="item-4">沈阳铁路局4</option>
+									<option value="item-5">沈阳铁路局5</option>
+								</select>
+							</div>
+							<div class="mui-input-row">
+								<label for="">部门：</label>
+								<select class="mui-btn mui-btn-block">
+									<option value="item-1">请选择部门</option>
+									<option value="item-2">后勤部2</option>
+									<option value="item-3">乘务部3</option>
+									<option value="item-4">人事部4</option>
+								</select>
+							</div>
+							<div class="mui-input-row">
+								<label for="">仓库类型：</label>
+								<select class="mui-btn mui-btn-block">
+									<option value="item-1">请选择仓库类型</option>
+									<option value="item-2">沈阳铁路局2</option>
+									<option value="item-3">沈阳铁路局3</option>
+									<option value="item-4">沈阳铁路局4</option>
+									<option value="item-5">沈阳铁路局5</option>
+								</select>
+							</div>
+
+						</form>
+					</li>
+				</ul>
+			</div>
+			<div class="mui-card">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-divider">商品信息</li>
+					<li class="mui-table-view-cell">
+						<form action="" class="mui-input-group">
+							<div class="mui-input-row">
+								<label for="">物资编码：</label>
+								<input type="text" class="mui-input-clear" placeholder="请填写物资编码" />
+							</div>
+							<div class="mui-input-row">
+								<label for="">物资名称：</label>
+								<input type="text" class="mui-input-clear" placeholder="请填写物资名称" />
+							</div>
+							<div class="mui-input-row">
+								<label for="">规格型号：</label>
+								<input type="text" class="mui-input-clear" placeholder="请填写规格型号" />
+							</div>
+							<div class="mui-input-row">
+								<label for="">供货商：</label>
+								<input type="text" class="mui-input-clear" placeholder="请填写供货商" />
+							</div>
+							<div class="mui-input-row">
+								<label for="">生产厂家：</label>
+								<input type="text" class="mui-input-clear" placeholder="请填写生产厂家" />
+							</div>
+						</form>
+					</li>
+				</ul>
+			</div>
+			<div class="mui-card">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-divider">入库信息</li>
+					<li class="mui-table-view-cell">
+						<form action="" class="mui-input-group">
+							<div class="mui-input-row">
+								<label for="">入库时间：</label>
+								<input type="date" class="mui-input-clear" placeholder="请填写入库时间" />
+							</div>
+							<div class="mui-input-row">
+								<label for="">入库人：</label>
+								<input type="text" class="mui-input-clear" placeholder="请填写姓名" />
+							</div>
+							<div class="mui-input-row">
+								<label for="">入库数量：</label>
+								<input type="text" class="mui-input-clear" placeholder="请填写入库数量" />
+							</div>
+							<div class="mui-input-row">
+								<label for="">入库单价：</label>
+								<input type="text" class="mui-input-clear" placeholder="请填写入库单价" />
+							</div>
+							<div class="mui-input-row">
+								<label for="">入库金额：</label>
+								<input type="text" class="mui-input-clear" placeholder="请填写入库金额" />
+							</div>
+							<div class="mui-input-row">
+								<label for="">结存数量：</label>
+								<input type="text" class="mui-input-clear" placeholder="请填写结存数量" />
+							</div>
+							<div class="mui-input-row">
+								<label for="">结存金额：</label>
+								<input type="text" class="mui-input-clear" placeholder="请填写结存金额" />
+							</div>
+							<div class="mui-input-row">
+								<label for="">单位：</label>
+								<input type="text" class="mui-input-clear" placeholder="请填写单位" />
+							</div>
+							<div class="mui-input-row">
+								<label for="">二维码：</label>
+								<input type="text" class="mui-input-clear" id="borcode_id" value=""/></input>
+							</div>
+							<div class="mui-input-row">
+								<label for="">FRID码：</label>
+								<input type="text" class="mui-input-clear" />
+							</div>
+						</form>
+					</li>
+				</ul>
+			</div>
+			<div class="mui-button-row">
+				<button type="button" class="mui-btn mui-btn-primary" onclick="back()">确认</button>&nbsp;&nbsp;
+				<button type="button" class="mui-btn mui-btn-danger" onclick="return false;">取消</button>
+			</div>
+
+		</div>
+		<script type="text/javascript" src="../js/immersed.js"></script>
+	</body>
+
+</html>
