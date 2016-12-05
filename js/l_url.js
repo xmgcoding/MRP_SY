@@ -1,0 +1,1 @@
+var l_url = 'http://222.35.18.6:8080/togest_emis';

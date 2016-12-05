@@ -7,6 +7,7 @@
 		<title>物料管理系统</title>
 		<script src="js/mui.min.js"></script>
 		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/l_url.js" type="text/javascript" charset="utf-8"></script>
 
 		<style>
 			.login_img {
@@ -65,75 +66,59 @@
 		<script type="text/javascript" charset="utf-8">
 			mui.init();
 
-			//			function postData(url, data, callback, waitingDialog) {
-			//
-			//				mui.ajax(url, {
-			//					data: 'data=' + JSON.stringify(data),
-			//					dataType: 'json',
-			//					type: 'post',
-			//					contentType: "application/x-www-form-urlencoded; charset=utf-8",
-			//					timeout: 60000,
-			//					success: callback,
-			//					error: function(xhr, type, errorThrown) {
-			//						waitingDialog.close();
-			//						mui.alert("<网络连接失败，请重新尝试一下>", "错误", "OK", null);
-			//					}
-			//				});
-			//			}
-			//			// 登录处理，还记得我们上一篇写得的按钮关联的事件吧  
-			//			document.getElementById("loginBtn").addEventListener('tap', function() {
-			//				// 显示一个等待的对话框  
-			//				var wd = plus.nativeUI.showWaiting();
-			//				// 构造要传递的json数据  
-			//				// $id 是一个通过 id 取得对象的方法，  
-			//				// 内容就是 return document.getElementById();  
-			//				var data = {
-			//					"userName": $id('username').value,
-			//					"userPassword": md5Hash($id('userpassword').value)
-			//				};
-			//				// 调用ajax  
-			//				postData(SERVER_HOST + MODULE_LOGIN, //服务端的URL  
-			//					data, // json 数据  
-			//					function(data) {
-			//						wd.close(); // 调用成功，先关闭等待的对话框  
-			//						if(data.result != "checkOK") {
-			//							// 如果密码错误，提示一下信息  
-			//							mui.alert("用户名或密码错误", "登录错误", "关闭");
-			//							return;
-			//						}
-			//						// 保存token，以便于下次自动登录  
-			//						localStorage.setItem(TOKEN_USER, $id('username').value);
-			//						localStorage.setItem(TOKEN_LOGIN, data.token);
-			//						// 清空用户名，密码  
-			//						$id('username').value = "";
-			//						$id("userpassword").value = "";
-			//						// 打开下一个画面  
-			//						mui.openWindow({
-			//							url: 'mainShow.html',
-			//							id: 'mainShow',
-			//						});
-			//					},
-			//					wd //传递给postData的最后一个参数，失败的时候关闭等待对话框  
-			//				);
-			//			});
-			mui.plusReady(function() {
-				var login = plus.webview.currentWebview();
-				document.getElementById("login").addEventListener('tap', function() {
-					var name = document.getElementById('account');
-					var ps = document.getElementById('password');
+			function postData(url, data, callback, waitingDialog) {
 
-					if(1) {
+				mui.ajax(url, {
+					data: 'data=' + JSON.stringify(data),
+					dataType: 'json',
+					type: 'post',
+					//contentType: "application/x-www-form-urlencoded; charset=utf-8",
+					timeout: 5000,
+					success: callback,
+					error: function(xhr, type, errorThrown) {
+						waitingDialog.close();
+						mui.alert("<网络连接失败，请重新尝试一下>", "错误", "OK", null);
+					}
+				});
+			}
+			// 登录处理，还记得我们上一篇写得的按钮关联的事件吧  
+			document.getElementById("login").addEventListener('tap', function() {
+				var account = document.getElementById('account');
+				var psd = document.getElementById('password');
+				// 显示一个等待的对话框  
+				var wd = plus.nativeUI.showWaiting();
+				// 构造要传递的json数据  
+				// $id 是一个通过 id 取得对象的方法，  
+				// 内容就是 return document.getElementById();  
+				var data = {
+					"userName": account.value,
+					"pwd": psd.value
+				};
+				// 调用ajax  
+				postData('' + l_url + '/wechat_code/handle_interface/get_instock_datalist?wechat_code=111111',
+					data, // json 数据  
+					function(data) {
+						wd.close(); // 调用成功，先关闭等待的对话框  
+						if(data.state != "ok") {
+							// 如果密码错误，提示一下信息  
+							mui.alert("用户名或密码错误", "登录错误", "关闭");
+							return;
+						}
+						//console.log(data.state);
+						// 保存token，以便于下次自动登录  
+						//localStorage.setItem(TOKEN_USER, $id('username').value);
+						//localStorage.setItem(TOKEN_LOGIN, data.token);
+						// 清空用户名，密码  
+						account.value = "";
+						psd.value = "";
+						// 打开下一个画面  
 						mui.openWindow({
 							url: 'html/main.html',
-							id: 'main',
-						})
-						login.hide();
-					} else {
-						alert('flase')
-					}
-				})
-				
-
+							id: 'main.html',
+						});
+					},
+					wd //传递给postData的最后一个参数，失败的时候关闭等待对话框  
+				);
 			});
 		</script>
 	</body>

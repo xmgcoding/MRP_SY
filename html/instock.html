@@ -8,6 +8,7 @@
 		<script src="../js/mui.min.js"></script>
 		<link href="../css/mui.min.css" rel="stylesheet" />
 		<script src="../js/common.js"></script>
+		<script src="../js/l_url.js" type="text/javascript" charset="utf-8"></script>
 		<style>
 			.mui-input-row .mui-btn-block {
 				width: 65%;
@@ -22,7 +23,7 @@
 			var blist = [];
 
 			function scaned(r) {
-				
+
 				var li = null,
 					hl = document.getElementById("history");
 				if(blist.length > 0) {
@@ -45,12 +46,71 @@
 				};
 				//update(t, r, f);
 				//alert(r);
-				var borcode_id=document.getElementById('borcode_id');
-				//console.log(borcode_id);
-				borcode_id.value = r+'';
-				
-				
+				var data = {
+					'wechat_code': r
+				}
+
+				mui.ajax(
+				''+l_url+'/wechat_code/handle_interface/get_instock_datalist?wechat_code=111111', {
+						data: {
+							wechat_code: r + '',
+						},
+						dataTape: 'json',
+						type: 'post',
+						timeout: 5000,
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						success: function(data) {
+							console.log(data);
+							var d = JSON.parse(data);
+							
+							var ret = d.data;
+							//console.log(d.data);
+							var _is_stock = ''; //入库状态
+							if(ret.is_stock == '0') {
+								_is_stock = '未入库';
+							} else {
+								_is_stock = '已入库';
+							}
+							
+							var in_info	= document.getElementById('in_info');
+//							var html = 
+//							"<div class='mui-input-row'><label>入库状态：</label><span>"+_is_stock+"</span></div>"
+//							+
+//							"<div class='mui-input-row'><label>部门：</label><span>"+ret.did_name+"</span></div>"
+//							+
+//							"<div class='mui-input-row'><label>物资编码：</label><span>"+ret.tmls_code+"</span></div>"
+//							+
+//							"<div class='mui-input-row'><label>物资名称：：</label><span>"+ret.tmls_name+"</span></div>"
+//							+
+//							"<div class='mui-input-row'><label>规格型号：：</label><span>"+ret.tmls_name+"</span></div>";
+//							
+//							
+//							
+//							in_info.innerHTML = html;
+//							
+							var label=document.getElementsByTagName("label");
+							for (var key in ret){
+								for(var i = 0;i<label.length;i++){
+									if(label[i]==ret[key]){
+										
+									}
+								}
+							}
+							
+							
+							
+						},
+						error: function(xhr, type, errorThrown) {
+							mui.alert("查询失败", "错误", "OK", null);
+						}
+
+					}
+
+				);
 			}
+			
 
 			function selected(id) {
 				var h = blist[id];
@@ -92,7 +152,7 @@
 			function cleanHistroy() {
 				if(blist.length > 0) {
 					var hl = document.getElementById("history");
-					hl.innerHTML = '<li id="nohistory" class="ditem" onclick="onempty();">无历史记录	</li>';
+					hl.innerHTML = '<li id="nohistory" class="ditem" onclick="onempty();">无历史记录</li>';
 				}
 				plus.io.resolveLocalFileSystemURL("_doc/barcode/", function(entry) {
 					entry.removeRecursively(function() {
@@ -126,121 +186,60 @@
 				<ul class="mui-table-view">
 					<li class="mui-table-view-divider">基本信息</li>
 					<li class="mui-table-view-cell">
-						<form action="" class="mui-input-group">
+						<form action="" class="mui-input-group" id="in_info">
 							<div class="mui-input-row">
-								<label for="">段别：</label>
-								<select class="mui-btn mui-btn-block">
-									<option value="item-1">请选择段别</option>
-									<option value="item-2">沈阳铁路局2</option>
-									<option value="item-3">沈阳铁路局3</option>
-									<option value="item-4">沈阳铁路局4</option>
-									<option value="item-5">沈阳铁路局5</option>
-								</select>
+								<label name="is_stock">入库状态：</label>
+								<span id="is_stock"></span>
 							</div>
 							<div class="mui-input-row">
-								<label for="">部门：</label>
-								<select class="mui-btn mui-btn-block">
-									<option value="item-1">请选择部门</option>
-									<option value="item-2">后勤部2</option>
-									<option value="item-3">乘务部3</option>
-									<option value="item-4">人事部4</option>
-								</select>
+								<label for="" name="did_name">部门：</label>
+								<span id="did_name"></span>
 							</div>
 							<div class="mui-input-row">
-								<label for="">仓库类型：</label>
-								<select class="mui-btn mui-btn-block">
-									<option value="item-1">请选择仓库类型</option>
-									<option value="item-2">沈阳铁路局2</option>
-									<option value="item-3">沈阳铁路局3</option>
-									<option value="item-4">沈阳铁路局4</option>
-									<option value="item-5">沈阳铁路局5</option>
-								</select>
-							</div>
-
-						</form>
-					</li>
-				</ul>
-			</div>
-			<div class="mui-card">
-				<ul class="mui-table-view">
-					<li class="mui-table-view-divider">商品信息</li>
-					<li class="mui-table-view-cell">
-						<form action="" class="mui-input-group">
-							<div class="mui-input-row">
-								<label for="">物资编码：</label>
-								<input type="text" class="mui-input-clear" placeholder="请填写物资编码" />
+								<label for="" name="tmls_code">物资编码：</label>
+								<span id="tmls_code"></span>
 							</div>
 							<div class="mui-input-row">
-								<label for="">物资名称：</label>
-								<input type="text" class="mui-input-clear" placeholder="请填写物资名称" />
+								<label for="" name="tmls_name">物资名称：</label>
+								<span id="tmls_name"></span>
 							</div>
 							<div class="mui-input-row">
-								<label for="">规格型号：</label>
-								<input type="text" class="mui-input-clear" placeholder="请填写规格型号" />
+								<label for="" name="tmls_model">规格型号：</label>
+								<span id="tmls_model"></span>
 							</div>
 							<div class="mui-input-row">
-								<label for="">供货商：</label>
-								<input type="text" class="mui-input-clear" placeholder="请填写供货商" />
+								<label for="" name="tmls_firm">供货商：</label>
+								<span id="tmls_firm"></span>
 							</div>
 							<div class="mui-input-row">
-								<label for="">生产厂家：</label>
-								<input type="text" class="mui-input-clear" placeholder="请填写生产厂家" />
+								<label for="" name="tmls_amount_in">入库数量：</label>
+								<span id="tmls_amount_in"></span>
 							</div>
-						</form>
-					</li>
-				</ul>
-			</div>
-			<div class="mui-card">
-				<ul class="mui-table-view">
-					<li class="mui-table-view-divider">入库信息</li>
-					<li class="mui-table-view-cell">
-						<form action="" class="mui-input-group">
+							
+							
 							<div class="mui-input-row">
-								<label for="">入库时间：</label>
-								<input type="date" class="mui-input-clear" placeholder="请填写入库时间" />
+								<label for="" name="tmls_price">入库单价：</label>
+								<span id="tmls_price"></span>
 							</div>
 							<div class="mui-input-row">
-								<label for="">入库人：</label>
-								<input type="text" class="mui-input-clear" placeholder="请填写姓名" />
+								<label for="" name="tmls_money">入库金额：</label>
+								<span id="tmls_money"></span>
 							</div>
 							<div class="mui-input-row">
-								<label for="">入库数量：</label>
-								<input type="text" class="mui-input-clear" placeholder="请填写入库数量" />
+								<label for="" name="tmls_unit">单位：</label>
+								<span id="tmls_unit"></span>
 							</div>
 							<div class="mui-input-row">
-								<label for="">入库单价：</label>
-								<input type="text" class="mui-input-clear" placeholder="请填写入库单价" />
+								<label for="" name="tmls_wechat_code">二维码：</label>
+								<span id="tmls_wechat_code"></span>
 							</div>
-							<div class="mui-input-row">
-								<label for="">入库金额：</label>
-								<input type="text" class="mui-input-clear" placeholder="请填写入库金额" />
-							</div>
-							<div class="mui-input-row">
-								<label for="">结存数量：</label>
-								<input type="text" class="mui-input-clear" placeholder="请填写结存数量" />
-							</div>
-							<div class="mui-input-row">
-								<label for="">结存金额：</label>
-								<input type="text" class="mui-input-clear" placeholder="请填写结存金额" />
-							</div>
-							<div class="mui-input-row">
-								<label for="">单位：</label>
-								<input type="text" class="mui-input-clear" placeholder="请填写单位" />
-							</div>
-							<div class="mui-input-row">
-								<label for="">二维码：</label>
-								<input type="text" class="mui-input-clear" id="borcode_id" value=""/></input>
-							</div>
-							<div class="mui-input-row">
-								<label for="">FRID码：</label>
-								<input type="text" class="mui-input-clear" />
-							</div>
+							
 						</form>
 					</li>
 				</ul>
 			</div>
 			<div class="mui-button-row">
-				<button type="button" class="mui-btn mui-btn-primary" onclick="back()">确认</button>&nbsp;&nbsp;
+				<button type="button" class="mui-btn mui-btn-primary" onclick="return false;" id="in_submit">提交</button>&nbsp;&nbsp;
 				<button type="button" class="mui-btn mui-btn-danger" onclick="return false;">取消</button>
 			</div>
 

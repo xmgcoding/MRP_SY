@@ -5,7 +5,8 @@
 			"css/mui.min.css",
 			"images/bg.png",
 			"images/login_logo.png",
-			"fonts/mui.ttf"
+			"fonts/mui.ttf",
+			"js/l_url.js"
 		],
 		"refer": [
 			"html/main.html"
@@ -112,7 +113,9 @@
 			"js/mui.min.js",
 			"fonts/mui.ttf",
 			"css/mui.min.css",
-			"js/immersed.js"
+			"js/immersed.js",
+			"js/my_ajax.js",
+			"js/l_url.js"
 		],
 		"refer": [
 			"html/barcode_scan.html"
